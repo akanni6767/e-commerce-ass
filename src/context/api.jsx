@@ -1,8 +1,10 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: '/api', // Backend URL
-    withCredentials: true, // Include cookies in requests
+    baseURL: import.meta.env.MODE === 'development'
+    ? '/api'
+    : 'https://ecommercebackend-8gx8.onrender.com/api',
+    withCredentials: true,
 });
 
 export default api;
