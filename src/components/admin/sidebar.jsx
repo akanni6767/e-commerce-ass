@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Package, ShoppingBag, MessageSquare, Users, Calendar, Menu, LayoutDashboard } from 'lucide-react';
 
 const Sidebar = (props) => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(props.isOpen);
     const [showDialog, setShowDialog] = useState(false);
     const [productData, setProductData] = useState({
         name: '',
@@ -16,28 +16,32 @@ const Sidebar = (props) => {
         inStockValue: 0,
         soldStockValue: 0
     });
-    const [isWidth, setWidth] = useState(props.sidebarWidth);
     const location = useLocation();
 
     // Set initial state based on screen size and update on resize
     useEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth >= 1024) { // lg breakpoint
-                setIsOpen(true);
-            } else {
-                setIsOpen(false);
-            }
-        };
+        if(props.handleSidebar) {
+            setIsOpen(props.isOpen);
+        }else {
+            const handleResize = () => {
+                if (window.innerWidth >= 1024) { // lg breakpoint
+                    setIsOpen(true);
+                } else {
+                    setIsOpen(false);
+                }
+            };
+    
+            // Set initial state
+            handleResize();
 
-        // Set initial state
-        handleResize();
+            // Add resize listener
+            window.addEventListener('resize', handleResize);
+            // Cleanup
+            return () => window.removeEventListener('resize', handleResize);
+        }
 
-        // Add resize listener
-        window.addEventListener('resize', handleResize);
 
-        // Cleanup
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
+    }, [props.isOpen]);
 
     const menuItems = [
         { name: 'Dashboard', icon: <LayoutDashboard />, path: '/admin' },
@@ -96,7 +100,7 @@ const Sidebar = (props) => {
         <>
             {/* Toggle button for small screens */}
             <button 
-                onClick={toggleSidebar}
+                onClick={props.handleSidebar ? props.sidebarWidth : toggleSidebar}
                 className="fixed top-4 left-4 p-2 rounded-lg hover:bg-pink-200 lg:hidden z-50"
             >
                 <Menu size={24} />
@@ -200,7 +204,7 @@ const Sidebar = (props) => {
 
             <div className={`fixed left-0 top-0 h-screen bg-pink-50 shadow-lg transition-all duration-300 flex flex-col 
                 lg:translate-x-0 lg:w-64
-                ${isOpen ? isWidth : 'w-20'}`}
+                ${isOpen ? 'w-64' : 'w-20'}`}
             >
                 <div className="flex items-center p-4">
                     {isOpen && (

@@ -40,7 +40,7 @@ function App() {
           <Route path="/:productId" element={<ProductDetail />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/admin/products" element={<Product />} />
-          <Route path="/admin/product_details" element={<ProductDetails />} />
+          <Route path="/admin/product_details/:id" element={<ProductDetails />} />
           <Route path="/admin/complaints" element={<Complaints />} />
           <Route path="/admin/orders" element={<Orders />} />
           <Route path="/admin/customers" element={<Customers />} />

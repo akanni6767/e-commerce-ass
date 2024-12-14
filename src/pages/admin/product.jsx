@@ -3,6 +3,8 @@ import Sidebar from '../../components/admin/sidebar';
 import { Pencil, Save, Search, ArrowUpDown } from 'lucide-react';
 import { Helmet } from "react-helmet";
 import { FaInfo } from 'react-icons/fa';
+import api from '../../context/api';
+import { Link } from 'react-router-dom';
 
 const Product = () => {
   const [products, setProducts] = useState([]);
@@ -23,14 +25,18 @@ const Product = () => {
   }, []);
 
   const fetchProducts = async () => {
-    try {
-      const response = await fetch('https://ecommercebackend-8gx8.onrender.com/get-product');
-      const data = await response.json();
-      console.log(data);
-      setProducts(data.products); // Access the products array from response
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    }
+    
+    api.get('/get-product')
+    .then( response => {
+        const data = response.data;
+        setProducts(data.products);
+        setIsLoading(false);
+    })
+    .catch(err => {
+        setError("Error fetching products: "+err.message);
+        setIsLoading(false);
+        throw new Error('Error fetching products');
+    });
   };
 
   const handleEdit = (product) => {
@@ -266,7 +272,9 @@ const Product = () => {
                         <Pencil className='text-blue-600 hover:text-blue-900' size={18} />
                       </button>
                     )}
-                    <FaInfo className='font-light cursor-pointer' />
+                    <Link to={`/admin/product_details/${product._id}`}>
+                      <FaInfo className='font-light cursor-pointer' />
+                    </Link>
                   </td>
                 </tr>
               ))}
