@@ -31,12 +31,12 @@ const ProductDetails = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
     return (
-        <div className="flex">
+        <div className="flex w-full">
             <Helmet>
             <title>Products | Admin | Mera Bestie</title>
             </Helmet>
             <Sidebar handleSidebar={true} isOpen={isSidebarOpen} sidebarWidth={toggleSidebar} />
-            <div className={`${isSidebarOpen ? 'pl-64' : 'pl-20'}`}>
+            <div className={`${isSidebarOpen ? 'pl-64' : 'pl-20'} w-full`}>
                 <ProductInfo product='6751f73eecca9fe8f7891e57' role="Admin" title="Product Details | Mera Bestie" />
             </div>
         </div>

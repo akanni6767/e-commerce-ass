@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet";
 import api from "../../context/api";
 import { Link } from "react-router-dom";
 import { FaHeart, FaShare } from "react-icons/fa";
-import { Heart, MessageSquare, Share, Share2, Share2Icon, ShareIcon } from "lucide-react";
+import { ChevronLeft, ChevronRight, Heart, MessageSquare, Share, Share2, Share2Icon, ShareIcon } from "lucide-react";
 
 // Style
 import '../../styles/product_details.scss';
@@ -40,7 +40,7 @@ const ProductInfo = (props) => {
                     <div className="productImages">
                         <div className="displayImages">
                             <div className="display_image">
-                                <img src="/src/components/Images/img1.jpg" alt="Product Image" />
+                                <img src="/src/components/Images/img2.jpg" alt="Product Image" />
                             </div>
                             <div className="product_images">
                                 <ul>
@@ -58,7 +58,10 @@ const ProductInfo = (props) => {
                                     <li><Heart /></li>
                                 </ul>
                             </div>
-                            
+                            <ul>
+                                <li><ChevronLeft /></li>
+                                <li><ChevronRight /></li>
+                            </ul>
                         </div>
                     </div>
                     <div className="productDescription">
