@@ -12,7 +12,7 @@ import LazyImage from "../../context/LazyImage";
 
 
 const loadRelatedProduct = (productsDetails, category) => {
-    const filterPrice = price =>  [originalPrice, discountedPrice] = price.split(/\s+/);
+    const filterPrice = price =>  price.split(/\s+/);
     return productsDetails.map(product => (
             <>
                 {product.category == category && 
@@ -24,9 +24,8 @@ const loadRelatedProduct = (productsDetails, category) => {
                             <div className="product_info">
                                 <h4>{product.name}</h4>
                                 <div className="price">
-                                    
-                                    <span className="dis_price">{product.price}</span>
-                                    {/* <span className="original_price">$420</span> */}
+                                    <span className="dis_price">{filterPrice(product.price)[1]}</span>
+                                    <span className="original_price">{filterPrice(product.price)[0]}</span>
                                 </div>
                             </div>
                         </Link>
