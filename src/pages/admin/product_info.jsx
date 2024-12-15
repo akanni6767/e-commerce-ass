@@ -28,7 +28,7 @@ const loadRelatedProduct = (productsDetails, category) => {
             <>
                 {product.category == category && 
                     <li>
-                        <Link to='/admin/products'>
+                        <Link to={`/single_product/${product._id}`}>
                             <div className="product_image">
                                 <LazyImage src={product.img} alt="Product Image" />
                             </div>
