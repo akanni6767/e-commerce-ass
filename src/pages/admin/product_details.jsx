@@ -66,8 +66,7 @@ const ProductDetails = () => {
             </Helmet>
             <Sidebar handleSidebar={true} isOpen={isSidebarOpen} sidebarWidth={toggleSidebar} />
 
-            <div className={`${isSidebarOpen ? 'pl-64' : 'pl-20'} w-full`}>
-                {product._id}
+            {product && <div className={`${isSidebarOpen ? 'pl-64' : 'pl-20'} w-full`}>
                 <header className="product_header px-4 w-full">
                     <h1 className="text-3xl font-bold text-gray-900 mb-4">Product Details</h1>
                     <div className="product_header_button flex justify-between">
@@ -78,8 +77,8 @@ const ProductDetails = () => {
                         </div>
                     </div>
                 </header>
-                <ProductInfo productId={true} role="Admin" title="Product Details | Mera Bestie" />
-            </div>
+                <ProductInfo productId={productId} role="Admin" title="Product Details | Mera Bestie" />
+            </div>}
         </div>
     )
 }

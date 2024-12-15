@@ -7,22 +7,81 @@ import { ChevronLeft, Star, ChevronRight, Heart, MessageSquare, Share, Share2, S
 
 // Style
 import '../../styles/product_info.scss';
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import LazyImage from "../../context/LazyImage";
 
+
+const loadRelatedProduct = (productsDetails, category) => {
+    const filterPrice = price =>  [originalPrice, discountedPrice] = price.split(/\s+/);
+    return productsDetails.map(product => (
+            <>
+                {product.category == category && 
+                    <li>
+                        <Link to='/admin/products'>
+                            <div className="product_image">
+                                <LazyImage src={product.img} alt="Product Image" />
+                            </div>
+                            <div className="product_info">
+                                <h4>{product.name}</h4>
+                                <div className="price">
+                                    
+                                    <span className="dis_price">{product.price}</span>
+                                    {/* <span className="original_price">$420</span> */}
+                                </div>
+                            </div>
+                        </Link>
+                    </li>
+                }
+            </>
+        ));
+}
 const ProductInfo = (props) => {
     const [productDetails, setProductDetails] = useState({});
     const [productsDetails, setProductsDetails] = useState([]);
-    api.get(`/product/${props.productId}`)
-    .then(response => {
-        const data = response.data;
-        const product_details = data.product;
-        const [originalPrice, discountedPrice] = product_details.price.split(/\s+/);
-        product_details.originalPrice = originalPrice;
-        product_details.discountedPrice = discountedPrice;
-        setProductDetails(product_details);
-    })
-    .catch(err => {
-        console.log(err);
-    })
+    const [error, setError] = useState(null);
+    
+    useEffect(() => {
+        api.get(`/product/${props.productId}`)
+        .then(response => {
+            const data = response.data;
+            const product_details = data.product;
+            const [originalPrice, discountedPrice] = product_details.price.split(/\s+/);
+            product_details.originalPrice = originalPrice;
+            product_details.discountedPrice = discountedPrice;
+            setProductDetails(product_details);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+
+    }, [props.productId]);
+    
+    useEffect(() => {
+        api.get('/get-product')
+        .then( response => {
+            const data = response.data;
+            const products = data.products;
+            setProductsDetails(products);
+        })
+        .catch(err => {
+            setError("Error fetching products: "+err.message);
+            // setIsLoading(false);
+            throw new Error('Error fetching products');
+        });
+
+    }, [productDetails]);
+
+
+    const formatAmount = (amount) => {
+        if(!amount) {
+            return 0;
+        }
+        return new Intl.NumberFormat('en-US', {
+          maximumFractionDigits: 0,
+        }).format(amount);
+    };
+    
+      
     return (
         <>
             <Helmet >
@@ -33,14 +92,15 @@ const ProductInfo = (props) => {
                     <div className="productImages">
                         <div className="displayImages">
                             <div className="display_image">
-                                <img src={productDetails.img} alt="Product Image" />
+                                {/* <LazyLoadImage src={productDetails.img} alt={productDetails.name} /> */}
+                                <LazyImage src={productDetails.img} alt={productDetails.name} />
                             </div>
                             <div className="product_images">
                                 <ul>
-                                    <li><img src="/src/components/Images/img2.jpg" alt="product image 1" /></li>
-                                    <li><img src="https://menscollection.ca/cdn/shop/collections/AW24_LONDON_LOOKBOOK_PAGES_MAN_Page_14_copy.jpg?v=1731360654&width=1080" alt="product image 1" /></li>
-                                    <li><img src="/src/components/Images/img2.jpg" alt="product image 1" /></li>
-                                    <li><img src="/src/components/Images/img4.jpg" alt="product image 1" /></li>
+                                    <li><LazyImage src={productDetails.img} alt={productDetails.name} /></li>
+                                    <li><LazyImage src="https://menscollection.ca/cdn/shop/collections/AW24_LONDON_LOOKBOOK_PAGES_MAN_Page_14_copy.jpg?v=1731360654&width=1080" alt={productDetails.name} /></li>
+                                    <li><LazyImage src="/src/components/Images/img2.jpg" alt={productDetails.name} /></li>
+                                    <li><LazyImage src="/src/components/Images/img4.jpg" alt={productDetails.name} /></li>
                                 </ul>
                             </div>
                         </div>
@@ -65,13 +125,13 @@ const ProductInfo = (props) => {
                             </div>
                             <div className="product_prices_review">
                                 <div className="product_price">
-                                    <s className="original_price">£400</s>
-                                    <h3 className="discount_price">£320</h3>
+                                    <span className="original_price">{productDetails.originalPrice}</span>
+                                    <h3 className="discount_price">{productDetails.discountedPrice}</h3>
                                 </div>
                                 <div className="product_review_sold">
-                                    <span className="__sold">1,228 Sold</span>
+                                    <span className="__sold">{formatAmount(productDetails.soldStockValue)} Sold</span>
                                     <small className="separator"></small>
-                                    <h3 className="__review"><Star /> 4.3</h3>
+                                    <h3 className="__review"><Star /> {productDetails.rating}</h3>
                                 </div>
                                 <hr />
                             </div>
@@ -83,8 +143,8 @@ const ProductInfo = (props) => {
                             </div>
                             <div className="product_specs">
                                 <div className="product_price">
-                                    <h3 className="discount_price">£320</h3>
-                                    <s className="original_price">£400</s>
+                                    <h3 className="discount_price">{productDetails.discountedPrice}</h3>
+                                    <span className="original_price">{productDetails.originalPrice}</span>
                                 </div>
                                 <div className="discount_percent">-35%</div>
                             </div>
@@ -96,11 +156,11 @@ const ProductInfo = (props) => {
                                         <Star className="fill-amber-300 stroke-amber-300" />
                                         <Star className="fill-amber-300 stroke-amber-300" />
                                         <Star className="stroke-gray-200"  />
-                                        (4,332 verified ratings)
+                                        ({formatAmount(productDetails.rating * 396) } verified ratings)
                                     </li>
                                 </ul>
                                 <div className="product_available">
-                                    12 available in stock
+                                {formatAmount(productDetails.inStockValue)} available in stock
                                     <small className="separator"></small>
                                     <span className="__stock">In stock</span>
                                 </div>
@@ -134,20 +194,7 @@ const ProductInfo = (props) => {
             <section className="product_related_products">
                 <h3>Related Products:</h3><hr />
                 <ul className="related_products">
-                    <li>
-                        <Link to='/admin/products'>
-                            <div className="product_image">
-                                <img src="/src/components/Images/img1.jpg" alt="Product Image" />
-                            </div>
-                            <div className="product_info">
-                                <h4>Long Sleeve, Khaki, 6</h4>
-                                <div className="price">
-                                    <span className="dis_price">$320</span>
-                                    <s className="original_price">$420</s>
-                                </div>
-                            </div>
-                        </Link>
-                    </li>
+                    {loadRelatedProduct(productsDetails,productDetails.category)}
                 </ul>
             </section>
             <section className="product_description">

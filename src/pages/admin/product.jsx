@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 const Product = () => {
   const [products, setProducts] = useState([]);
   const [editingId, setEditingId] = useState(null);
+  const [error, setError] = useState(null);
   const [editValues, setEditValues] = useState({
     inStockValue: '',
     soldStockValue: ''

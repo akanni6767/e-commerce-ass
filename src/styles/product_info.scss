@@ -10,15 +10,18 @@
         @apply max-lg:gap-6;
         @apply max-md:flex-col;
         .productImages {
-            @apply flex-grow flex gap-8 h-full pr-8;
+            @apply w-7/12 flex gap-8 h-full pr-8;
             @apply max-md:w-full;
             .displayImages {
                 @apply flex flex-col gap-6 w-full;
                 .display_image {
                     @apply w-full rounded-lg bg-gray-100 h-[500px];
-                    @apply px-4 flex justify-center items-end pt-8;
-                    > img {
-                        @apply h-full w-full object-scale-down rounded-t-lg;
+                    @apply flex justify-center items-center  overflow-hidden;
+                    > div {
+                        @apply w-full h-full overflow-hidden flex justify-center;
+                        > img {
+                            @apply h-full w-full object-contain ;
+                        }
                     }
                 }
                 .product_images {
@@ -27,8 +30,9 @@
                         @apply flex gap-4 items-end justify-center;
                         li {
                             @apply cursor-pointer w-16 h-24 rounded-lg bg-gray-100 flex justify-center items-center;
-                            > img {
-                                @apply object-cover rounded-t-lg origin-center;
+                            
+                            > div img {
+                                @apply h-full object-cover rounded-t-lg origin-center;
                             }
                         }
                     }
@@ -78,7 +82,7 @@
                     .product_review_sold {
                         @apply flex items-center gap-1.5 justify-end flex-grow;
                         .__sold {
-                            @apply text-gray-400 text-xl;
+                            @apply text-gray-400 text-base;
                             @apply max-md:text-sm;
 
                         }
@@ -177,13 +181,16 @@
     .related_products {
         @apply flex gap-7 snap-x snap-mandatory w-full overflow-x-auto;
         li {
-            @apply w-32 h-52;
+            @apply w-32 !max-w-32 h-56;
             > a {
-                @apply w-full flex flex-col justify-between items-end gap-3 h-full;
+                @apply w-full py-2 flex flex-col justify-between items-end gap-3 h-full;
                 .product_image {
                     @apply flex-grow;
-                    > img {
-                        @apply object-cover size-full rounded-lg;
+                    > div {
+                        @apply h-full w-full ;
+                        > img {
+                            @apply object-cover size-full rounded-lg;
+                        }
                     }
                 }
                 .product_info {
