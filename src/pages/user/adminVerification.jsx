@@ -29,7 +29,6 @@ const AdminVerification = () => {
     }
     const verify = async () => {
         const passcode_stored = import.meta.env.VITE_REACT_APP_ADMIN_PASS_CODE;
-        console.log(passcode_stored, import.meta.env);
         await loading();
         if(passcode === passcode_stored) {
             toast("Passcode verified!");

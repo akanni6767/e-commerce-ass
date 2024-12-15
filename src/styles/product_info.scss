@@ -1,0 +1,238 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.productDetails {
+    @apply p-8 m-4 bg-white rounded;
+    .productDetail {
+        @apply w-full h-full;
+        @apply flex gap-10 items-start;
+        @apply max-lg:gap-6;
+        @apply max-md:flex-col;
+        .productImages {
+            @apply flex-grow flex gap-8 h-full pr-8;
+            @apply max-md:w-full;
+            .displayImages {
+                @apply flex flex-col gap-6 w-full;
+                .display_image {
+                    @apply w-full rounded-lg bg-gray-100 h-[500px];
+                    @apply px-4 flex justify-center items-end pt-8;
+                    > img {
+                        @apply h-full w-full object-scale-down rounded-t-lg;
+                    }
+                }
+                .product_images {
+                    @apply w-full;
+                    ul {
+                        @apply flex gap-4 items-end justify-center;
+                        li {
+                            @apply cursor-pointer w-16 h-24 rounded-lg bg-gray-100 flex justify-center items-center;
+                            > img {
+                                @apply object-cover rounded-t-lg origin-center;
+                            }
+                        }
+                    }
+                }
+            }
+            .product_tools {
+                @apply flex flex-col justify-between pb-32;
+                ul {
+                    @apply flex flex-col gap-2;
+                    > li {
+                        @apply rounded-lg bg-gray-100 flex justify-center items-center text-xs font-light size-8 cursor-pointer;
+                        > * {
+                            @apply w-4 text-gray-500;
+                        }
+                    }
+                }
+                .share_like {
+                    @apply grid grid-cols-1;
+                }
+            }
+        }
+        .productDescription {
+            @apply w-2/5 rounded-lg h-full flex flex-col gap-4;
+            @apply max-md:w-full;
+            > header {
+                @apply w-full overflow-hidden flex flex-col gap-5;
+                .product_about {
+                    @apply flex flex-col gap-3 w-full;
+                    .author_name {
+                        @apply text-base text-gray-400
+                    }
+                    .product_name {
+                        @apply font-semibold text-4xl text-wrap;
+                    }
+                }
+                .product_prices_review {
+                    @apply flex justify-between items-center w-full;
+                    .product_price {
+                        @apply flex gap-4 items-center;
+                        .original_price {
+                            @apply text-gray-500 text-lg font-medium;
+                        }
+                        .discount_price {
+                            @apply text-2xl font-semibold text-gray-900
+                        }
+                    }
+                    .product_review_sold {
+                        @apply flex items-center gap-1.5 justify-end flex-grow;
+                        .__sold {
+                            @apply text-gray-400 text-xl;
+                            @apply max-md:text-sm;
+
+                        }
+                        .separator {
+                            @apply size-1.5 rounded-full bg-gray-200;
+                        }
+                        .__review {
+                            @apply flex gap-1 justify-center items-center text-2xl font-semibold;
+                            @apply max-md:text-lg;
+
+                            > svg {
+                                @apply size-5;
+                                path {
+                                    @apply fill-current text-amber-300 h-2;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .product_details{
+                @apply w-full h-full flex flex-col gap-6;
+                .product_desc {
+                    @apply w-full;
+                    > h2 {
+                        @apply text-2xl font-semibold;
+                    }
+                    > p {
+                        @apply text-gray-500 text-base;
+                        @apply text-gray-500 text-base line-clamp-3;
+                    }
+                }
+                ul {
+                    @apply flex flex-col gap-2 w-full;
+                    > li {
+                        @apply flex gap-1 items-center;
+                        > * {
+                            @apply w-4 text-gray-500;
+                        }
+                    }
+                }
+                .product_specs {
+                    @apply flex gap-2 items-center;
+                    .product_price {
+                        @apply flex gap-1 items-baseline;
+                       .original_price {
+                            @apply text-gray-500 text-base font-medium;
+                       }
+                       .discount_price {
+                            @apply text-2xl font-semibold text-gray-900
+                       }
+                    }
+                    .discount_percent {
+                        @apply bg-amber-200 bg-opacity-60 px-1 text-amber-400 w-fit h-fit rounded text-sm;
+                    }
+                }
+                .product_features {
+                    @apply flex flex-col gap-3;
+                    ul li {
+                        @apply flex items-center text-sm text-blue-800;
+                    }
+                    .product_available {
+                        @apply flex gap-1 items-center text-sm text-gray-500 w-full;
+                        .separator {
+                            @apply size-1.5 rounded-full bg-gray-200;
+                        }
+                        > * {
+                            @apply w-fit text-blue-800;
+                        }
+    
+                    }
+                    .product_variants {
+                        > span {
+                            @apply text-lg font-semibold text-gray-800
+                        }
+                    }
+                    .product_size_guide {
+                        @apply w-full text-sm flex gap-3 items-center text-green-600;
+                        .separator {
+                            @apply size-1.5 rounded-full bg-gray-200;
+                        }
+                        .__size_guide {
+                            @apply text-gray-500 text-xs;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.product_related_products {
+    @apply mx-4 my-9 bg-white rounded-lg px-10 py-4 h-fit;
+    > h3 {
+        @apply font-semibold text-xl text-blue-900;
+    }
+    .related_products {
+        @apply flex gap-7 snap-x snap-mandatory w-full overflow-x-auto;
+        li {
+            @apply w-32 h-52;
+            > a {
+                @apply w-full flex flex-col justify-between items-end gap-3 h-full;
+                .product_image {
+                    @apply flex-grow;
+                    > img {
+                        @apply object-cover size-full rounded-lg;
+                    }
+                }
+                .product_info {
+                    @apply flex flex-col gap-2 self-end items-start;
+                    > h4 {
+                        @apply text-sm font-normal line-clamp-1;
+                    }
+                    .price {
+                        @apply flex flex-col gap-0;
+                        .dis_price {
+                            @apply font-semibold leading-none text-lg;
+                        }
+                        .original_price {
+                            @apply text-xs font-light;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.product_description {
+    @apply mx-4 my-9 bg-white rounded-lg px-10 py-4 h-fit;
+    > h3 {
+        @apply font-semibold text-xl text-blue-900 leading-10;
+    }
+    .description {
+        @apply w-full text-sm text-gray-500 flex flex-col gap-2;
+        p {
+            @apply text-gray-600 text-base;
+        }
+    }
+}
+.product_additional_info {
+    @apply mx-4 my-9 bg-white rounded-lg px-10 py-4 h-fit;
+    > h3 {
+        @apply font-semibold text-xl text-blue-900;
+    }
+    table {
+        @apply w-full text-sm text-gray-500 border-collapse border-separate border border-t-0;
+        th,
+        td {
+            @apply border-b border-gray-200;
+        }
+        th {
+            @apply text-left py-3;
+        }
+        td {
+            @apply py-3;
+        }
+    }
+}
