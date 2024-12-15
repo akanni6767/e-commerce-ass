@@ -4,15 +4,54 @@ import Navbar from '../../components/user/navbar/navbar';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from "react-helmet";
+import api from '../../context/api';
 
+// const formatAmount = (amount) => {
+//   if(isNaN(amount)) {
+//       amount = 0; 
+//   }
+//   return new Intl.NumberFormat('en-IN', {
+//     style: 'currency',
+//     currency: 'INR',
+//     maximumFractionDigits: 2,
+//   }).format(amount);
+// };
+
+// const loadRelatedProduct = (productsDetails, category) => {
+//   const filterPrice = price =>  price.split(/\s+/);
+//   return productsDetails.map(product => (
+//       <>
+//           {product.category == category && 
+//               <li>
+//                   <Link to='/admin/products'>
+//                       <div className="product_image">
+//                           <LazyImage src={product.img} alt="Product Image" />
+//                       </div>
+//                       <div className="product_info">
+//                           <h4>{product.name}</h4>
+//                           <div className="price">
+//                               <span className="dis_price">{formatAmount(filterPrice(product.price)[1] ?? filterPrice(product.price)[0])}</span>
+//                               <s className="original_price">{formatAmount(filterPrice(product.price)[0])}</s>
+//                           </div>
+//                       </div>
+//                   </Link>
+//               </li>
+//           }
+//       </>
+//   ));
+// }
 const Shop = ({category}) => {
   const [viewMode, setViewMode] = useState('grid');
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [loadMore, setLoadMore] = useState(6);
+  const [loadMore, setLoadMore] = useState(25);
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(category || 'all');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
+  const [productDetails, setProductDetails] = useState({});
+  const [productsDetails, setProductsDetails] = useState([]);
+  const [error, setError] = useState(null);
+  
   const categories = [
     {
       name: 'Books',
@@ -30,10 +69,10 @@ const Shop = ({category}) => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      try {
-        const response = await fetch('https://ecommercebackend-8gx8.onrender.com/get-product');
-        const data = await response.json();
-        console.log(data.products)
+
+      api.get('/get-product')
+      .then( response => {
+        const data = response.data;
         if (data.success) {
           const validProducts = data.products.filter(product => 
             product.name && 
@@ -43,13 +82,15 @@ const Shop = ({category}) => {
             product._id &&
             (product.visibility === ("on") || product.visibility === "true")
           );
-          console.log(validProducts)
           setProducts(validProducts);
           setFilteredProducts(validProducts);
         }
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
+      })
+      .catch(err => {
+          setError("Error fetching products: "+err.message);
+          // setIsLoading(false);
+          throw new Error('Error fetching products');
+      });
     };
 
     fetchProducts();
@@ -63,7 +104,7 @@ const Shop = ({category}) => {
       const filtered = products.filter(product => product.category === category);
       setFilteredProducts(filtered);
     }
-    setLoadMore(6);
+    setLoadMore(25);
   };
 
   const sortProducts = (sortBy) => {
@@ -87,11 +128,11 @@ const Shop = ({category}) => {
   };
 
   const handleLoadMore = () => {
-    setLoadMore(prevLoadMore => prevLoadMore + 6);
+    setLoadMore(prevLoadMore => prevLoadMore + 26);
   };
 
   const handleShowLess = () => {
-    setLoadMore(prevLoadMore=>prevLoadMore-6);
+    setLoadMore(prevLoadMore=>prevLoadMore-26);
   };
 
   const addPostToRecentlyViewed = (productId) => {
@@ -114,7 +155,6 @@ const Shop = ({category}) => {
       </Helmet>
       <div className="bg-gradient-to-b from-pink-50 to-pink-100 min-h-screen">
         <Navbar />
-
         {/* Hero Section with Refined Design */}
         <section 
           className="relative bg-cover bg-center py-20 text-center"
@@ -210,7 +250,7 @@ const Shop = ({category}) => {
         <div className="max-w-7xl mx-auto px-6 py-8">
           <AnimatePresence>
             <motion.div
-              className={`grid ${viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8' : 'grid-cols-1 gap-6'}`}
+              className={`grid ${viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8' : 'grid-cols-1 gap-6'}`}
               initial="hidden"
               animate="visible"
               variants={{
@@ -227,7 +267,7 @@ const Shop = ({category}) => {
               {filteredProducts.slice(0, loadMore).map((product) => (
                 <motion.div
                   key={product._id}
-                  className={`bg-white shadow-lg rounded-xl overflow-hidden relative 
+                  className={`bg-white shadow-lg rounded overflow-hidden relative 
                     ${viewMode === 'list' ? 'flex items-center p-4 space-x-6' : ''}`}
                   variants={{
                     hidden: { opacity: 0, y: 20 },
@@ -297,7 +337,7 @@ const Shop = ({category}) => {
                     </div>
 
                     <Link 
-                      to={`/${product._id}`} 
+                      to={`/single_product/${product._id}`} 
                       className={`block ${viewMode === 'grid' ? 'mt-2' : 'mt-4'}`}
                     >
                       <button 

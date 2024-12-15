@@ -19,6 +19,8 @@ import { AuthProvider } from "./context/AuthContext";
 import Admin from "./pages/user/admin";
 import AdminVerification from "./pages/user/adminVerification";
 import ProductDetails from "./pages/admin/product_details";
+import UserProductDetails from "./pages/user/product_details";
+import BillingAddress from "./pages/user/checkout_address";
 
 function App() {
   return (
@@ -38,6 +40,8 @@ function App() {
           <Route path="/auth_admin" element={<AdminVerification />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/:productId" element={<ProductDetail />} />
+          <Route path="/single_product/:id" element={<UserProductDetails />} />
+          <Route path="/product/checkout/address" element={<BillingAddress />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/admin/products" element={<Product />} />
           <Route path="/admin/product_details/:id" element={<ProductDetails />} />

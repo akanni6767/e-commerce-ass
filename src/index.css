@@ -2,3 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+
+.scrolling-bar {
+    scrollbar-gutter: stable;
+    @apply transition-colors duration-300 relative;
+    .scrolling-bar:hover::-webkit-scrollbar-thumb {
+        @apply bg-opacity-100 transition-colors duration-300 absolute;
+    }
+    .scrolling-bar::-webkit-scrollbar {
+        @apply w-1 transition-colors duration-300 absolute;
+    }
+    .scrolling-bar::-webkit-scrollbar-track {
+        @apply bg-transparent  mx-2 translate-x-4 transition-colors duration-300 absolute;
+    }
+    .scrolling-bar::-webkit-scrollbar-thumb {
+        @apply rounded-2xl bg-opacity-30 transition-colors duration-300 absolute bg-gray-300 pr-3 ;
+    }
+}
+
+.x-thin-scroll {
+    width: 100%;
+    overflow-y: hidden;
+    overflow-x: auto;
+    /* Hide vertical scrollbar */
+    white-space: nowrap;
+    /* Prevent wrapping */
+    -ms-overflow-style: none;
+    /* Hide scrollbar on Edge */
+    scrollbar-width: none;
+    
+}
+/* Hide scrollbar on Firefox */
+.x-thin-scroll::-webkit-scrollbar {
+    @apply hidden;
+}

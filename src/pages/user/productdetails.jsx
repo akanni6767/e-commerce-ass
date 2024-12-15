@@ -17,6 +17,7 @@ import {
 } from 'react-icons/fa';
 import Navbar from '../../components/user/navbar/navbar';
 import { Helmet } from "react-helmet";
+import api from '../../context/api';
 
 const ProductDetail = () => {
   const { productId } = useParams();
@@ -29,16 +30,30 @@ const ProductDetail = () => {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      try {
-        const response = await fetch(`https://ecommercebackend-8gx8.onrender.com/product/${productId}`);
-        const data = await response.json();
+      
+      api.get(`/product/${productId}`)
+      .then( response => {
+        const data = response.data;
         if (data.success) {
           setProduct(data.product);
           calculateStockStatus(data.product);
         }
-      } catch (error) {
-        console.error('Error fetching product:', error);
-      }
+      })
+      .catch(err => {
+          // setError("Error fetching product details: "+err.message);
+          // setIsLoading(false);
+          throw new Error('Error fetching products'+err.message);
+      });
+      // try {
+      //   const response = await fetch(`https://ecommercebackend-8gx8.onrender.com/product/${productId}`);
+      //   const data = await response.json();
+      //   if (data.success) {
+      //     setProduct(data.product);
+      //     calculateStockStatus(data.product);
+      //   }
+      // } catch (error) {
+      //   console.error('Error fetching product:', error);
+      // }
     };
     fetchProduct();
   }, [productId]);

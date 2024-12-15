@@ -183,18 +183,18 @@
         li {
             @apply w-32 !max-w-32 h-56;
             > a {
-                @apply w-full py-2 flex flex-col justify-between items-end gap-3 h-full;
+                @apply w-full py-2 flex flex-col justify-between items-start gap-3 h-full;
                 .product_image {
-                    @apply flex-grow;
+                    @apply flex-grow h-32 min-h-32 min-w-32;
                     > div {
                         @apply h-full w-full ;
                         > img {
-                            @apply object-cover size-full rounded-lg;
+                            @apply object-cover size-full rounded;
                         }
                     }
                 }
                 .product_info {
-                    @apply flex flex-col gap-2 self-end items-start;
+                    @apply flex flex-col gap-2 self-end items-start w-full;
                     > h4 {
                         @apply text-sm font-normal line-clamp-1;
                     }

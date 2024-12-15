@@ -11,6 +11,17 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import LazyImage from "../../context/LazyImage";
 
 
+const formatAmount = (amount) => {
+    if(isNaN(amount)) {
+        amount = 0; 
+    }
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 2,
+    }).format(amount);
+};
+
 const loadRelatedProduct = (productsDetails, category) => {
     const filterPrice = price =>  price.split(/\s+/);
     return productsDetails.map(product => (
@@ -24,8 +35,8 @@ const loadRelatedProduct = (productsDetails, category) => {
                             <div className="product_info">
                                 <h4>{product.name}</h4>
                                 <div className="price">
-                                    <span className="dis_price">{filterPrice(product.price)[1]}</span>
-                                    <span className="original_price">{filterPrice(product.price)[0]}</span>
+                                    <span className="dis_price">{formatAmount(filterPrice(product.price)[1] ?? filterPrice(product.price)[0])}</span>
+                                    <s className="original_price">{formatAmount(filterPrice(product.price)[0])}</s>
                                 </div>
                             </div>
                         </Link>
@@ -71,15 +82,14 @@ const ProductInfo = (props) => {
     }, [productDetails]);
 
 
-    const formatAmount = (amount) => {
+    const formatNumber = (amount) => {
         if(!amount) {
             return 0;
         }
         return new Intl.NumberFormat('en-US', {
           maximumFractionDigits: 0,
         }).format(amount);
-    };
-    
+    };    
       
     return (
         <>
@@ -128,7 +138,7 @@ const ProductInfo = (props) => {
                                     <h3 className="discount_price">{productDetails.discountedPrice}</h3>
                                 </div>
                                 <div className="product_review_sold">
-                                    <span className="__sold">{formatAmount(productDetails.soldStockValue)} Sold</span>
+                                    <span className="__sold">{formatNumber(productDetails.soldStockValue)} Sold</span>
                                     <small className="separator"></small>
                                     <h3 className="__review"><Star /> {productDetails.rating}</h3>
                                 </div>
@@ -155,11 +165,11 @@ const ProductInfo = (props) => {
                                         <Star className="fill-amber-300 stroke-amber-300" />
                                         <Star className="fill-amber-300 stroke-amber-300" />
                                         <Star className="stroke-gray-200"  />
-                                        ({formatAmount(productDetails.rating * 396) } verified ratings)
+                                        ({formatNumber(productDetails.rating * 396) } verified ratings)
                                     </li>
                                 </ul>
                                 <div className="product_available">
-                                {formatAmount(productDetails.inStockValue)} available in stock
+                                {formatNumber(productDetails.inStockValue)} available in stock
                                     <small className="separator"></small>
                                     <span className="__stock">In stock</span>
                                 </div>
@@ -178,13 +188,13 @@ const ProductInfo = (props) => {
                                     <span className="__size_guide">Size Guide</span>
                                 </div>
                             </div>
-                            <div className="product_place_order">
-                                <Link to='/admin/checkout'>
+                            {props.role !== 'Admin' && <div className="product_place_order">
+                                <Link to='/product/checkout/address'>
                                     <button className="bg-[#6dc522] text-white py-2 rounded-md hover:bg-[#6dc533] w-full transition-colors">
                                         Place Order
                                     </button>
                                 </Link>
-                            </div>
+                            </div>}
                         </div>
                     </div>
                 </div>
@@ -192,7 +202,7 @@ const ProductInfo = (props) => {
             
             <section className="product_related_products">
                 <h3>Related Products:</h3><hr />
-                <ul className="related_products">
+                <ul className="related_products x-thin-scroll">
                     {loadRelatedProduct(productsDetails,productDetails.category)}
                 </ul>
             </section>
